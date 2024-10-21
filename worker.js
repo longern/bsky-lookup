@@ -8,10 +8,20 @@ const HTML_TEMPLATE = `
       body {
         font-family: sans-serif;
         margin: 0;
+        background-color: whitesmoke;
       }
       main {
         max-width: 600px;
         margin: 0 auto;
+        background-color: white;
+      }
+      @media (min-width: 600px) {
+        main {
+          margin-top: 8px;
+          margin-bottom: 8px;
+          border-radius: 5px;
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
       }
       ul {
         list-style-type: none;
@@ -22,6 +32,7 @@ const HTML_TEMPLATE = `
       li>a {
         padding: 8px 16px;
         flex-grow: 1;
+        color: #145b94;
         transition: background-color 0.3s;
       }
       li>a:hover {
@@ -30,6 +41,13 @@ const HTML_TEMPLATE = `
       .list-text {
         margin-top: 4px;
         margin-bottom: 4px;
+        line-height: 1.5;
+      }
+      li>hr {
+        margin: 0 16px;
+        border: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        width: 100%;
       }
     </style>
   </head>
@@ -64,7 +82,7 @@ export default {
       const subdomain = record.name.replace("_atproto.", "");
       return `<li><a href="https://${subdomain}"><div class="list-text">@${subdomain}</div></a></li>`;
     });
-    return new Response(HTML_TEMPLATE.replace("{{links}}", links.join("")), {
+    return new Response(HTML_TEMPLATE.replace("{{links}}", links.join("<li><hr/></li>")), {
       headers: { "Content-Type": "text-html" },
     });
   },
