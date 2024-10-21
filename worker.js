@@ -27,6 +27,10 @@ const HTML_TEMPLATE = `
       li>a:hover {
         background-color: rgba(0, 0, 0, 0.1);
       }
+      .list-text {
+        margin-top: 4px;
+        margin-bottom: 4px;
+      }
     </style>
   </head>
   <body>
@@ -58,11 +62,10 @@ export default {
     const { result: records } = data;
     const links = records.map((record) => {
       const subdomain = record.name.replace("_atproto.", "");
-      return `<li><a href="https://${subdomain}">@${subdomain}</a></li>`;
+      return `<li><a href="https://${subdomain}"><div class="list-text">@${subdomain}</div></a></li>`;
     });
-    return new Response(
-      HTML_TEMPLATE.replace("{{links}}", links.join("")),
-      { headers: { "Content-Type": "text-html" } }
-    );
+    return new Response(HTML_TEMPLATE.replace("{{links}}", links.join("")), {
+      headers: { "Content-Type": "text-html" },
+    });
   },
 };
