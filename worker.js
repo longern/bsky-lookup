@@ -102,7 +102,9 @@ const HTML_TEMPLATE = `
           "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfiles";
         for (let i = 0; i < actors.length; i += ACTORS_CHUNK_SIZE) {
           const chunk = actors.slice(i, i + ACTORS_CHUNK_SIZE);
-          const searchParams = new URLSearchParams(chunk.map((handle) => ["actors", handle]));
+          const searchParams = new URLSearchParams(
+            chunk.map((handle) => ["actors", handle])
+          );
           const response = await fetch(PROFILES_API + "?" + searchParams);
           const { profiles } = await response.json();
           profiles.forEach((profile) => {
