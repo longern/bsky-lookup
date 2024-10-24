@@ -7,6 +7,7 @@ const HTML_TEMPLATE = `
     <style>
       body {
         font-family: sans-serif;
+        font-size: 14px;
         margin: 0;
         background-color: whitesmoke;
       }
@@ -33,19 +34,24 @@ const HTML_TEMPLATE = `
       }
       li > a {
         min-width: 0;
-        padding: 8px 16px;
+        padding: 16px;
         flex-grow: 1;
-        display: flex;
-        color: #145b94;
+        color: initial;
         text-decoration: none;
         transition: background-color 0.3s;
       }
       li > a:hover {
         background-color: rgba(0, 0, 0, 0.1);
       }
+      .stack {
+        display: flex;
+      }
+      .stack.direction-column {
+        flex-direction: column;
+      }
       .list-avatar {
         flex-shrink: 0;
-        margin-right: 16px;
+        margin-right: 8px;
         overflow: hidden;
         display: flex;
         border-radius: 50%;
@@ -58,18 +64,36 @@ const HTML_TEMPLATE = `
         flex-direction: column;
         justify-content: center;
       }
-      .list-text > p {
+      p {
         margin: 0;
+      }
+      .list-text > p {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
+      .list-text-primary {
+        font-weight: bold;
+      }
       .list-text-secondary {
         color: #666;
-        font-size: 0.8em;
+        font-size: 0.9em;
+      }
+      .description {
+        margin-top: 8px;
+        white-space: pre-wrap;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-clamp: 3;
+        -webkit-line-clamp: 3;
+        font-size: 0.9em;
+      }
+      .description:empty {
+        display: none;
       }
       li > hr {
-        margin: 0 16px 0 80px;
+        margin: 0;
         border: 0;
         border-top: 1px solid rgba(0, 0, 0, 0.05);
         width: 100%;
@@ -80,12 +104,17 @@ const HTML_TEMPLATE = `
     <template id="link-template">
       <li>
         <a>
-          <div class="list-avatar">
-            <img width="48" height="48" />
-          </div>
-          <div class="list-text">
-            <p class="list-text-primary"></p>
-            <p class="list-text-secondary"></p>
+          <div class="stack direction-column">
+            <div class="stack">
+              <div class="list-avatar">
+                <img width="48" height="48" />
+              </div>
+              <div class="list-text">
+                <p class="list-text-primary"></p>
+                <p class="list-text-secondary"></p>
+              </div>
+            </div>
+            <div class="description"></div>
           </div>
         </a>
       </li>
@@ -119,8 +148,13 @@ const HTML_TEMPLATE = `
             img.alt = profile.handle;
             const primary = clone.querySelector(".list-text-primary");
             primary.textContent = displayName;
-            const secondary = clone.querySelector(".list-text-secondary");
+            const secondary = clone.querySelector(
+              ".list-text .list-text-secondary"
+            );
             secondary.textContent = "@" + profile.handle;
+            const description = clone.querySelector(".description");
+            description.textContent = profile.description;
+
             const actorsElement = document.getElementById("actors");
             if (actorsElement.childElementCount) {
               const li = document.createElement("li");
